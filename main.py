@@ -5,7 +5,7 @@ from PIL import Image
 # The new width for images in the ROOT_PATH folder.
 NEW_WIDTH = 640
 # Path to the folder you want Python to find and resize images
-ROOT_PATH = '/PATH/TO/IMAGES'
+ROOT_PATH = r'/PATH/TO/IMAGES'
 
 
 def calc_new_height(width, height, new_width):
