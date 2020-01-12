@@ -11,7 +11,7 @@ args = parser.parse_args()
 # The new width for images in the ROOT_PATH folder.
 NEW_WIDTH = args.new_width or 640
 # Path to the folder you want Python to find and resize images
-ROOT_PATH = args.root_path or r'/PATH/TO/IMAGES'
+ROOT_PATH = args.root_path or r'/PATH/TO/PICTURES'
 
 
 def calc_new_height(width, height, new_width):
@@ -22,18 +22,35 @@ def resize(root, file, new_width, new_img_name):
     original_img_path = os.path.join(root, file)
     new_img_path = os.path.join(root, new_img_name)
 
+    try:
+        new_width = int(new_width)
+    except:
+        raise TypeError(
+            f'-w, --new-width or NEW_WIDTH must be a number. Sent "{NEW_WIDTH}".')
+
     pillow_img = Image.open(original_img_path)
     width, height = pillow_img.size
 
     new_height = calc_new_height(width, height, new_width)
 
     new_img = pillow_img.resize((new_width, new_height), Image.LANCZOS)
-    new_img.save(
-        new_img_path,
-        optimize=True,
-        quality=50,
-        exif=pillow_img.info.get('exif')
-    )
+
+    try:
+        new_img.save(
+            new_img_path,
+            optimize=True,
+            quality=50,
+            exif=pillow_img.info.get('exif')
+        )
+    except:
+        try:
+            new_img.save(
+                new_img_path,
+                optimize=True,
+                quality=50,
+            )
+        except:
+            raise RuntimeError(f'Could not convert "{original_img_path}".')
 
     print(f'Saved at {new_img_path}')
 
